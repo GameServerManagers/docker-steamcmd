@@ -18,7 +18,7 @@ RUN echo "**** Install SteamCMD ****" \
 && echo steam steam/question select "I AGREE" | debconf-set-selections \
 && echo steam steam/license note '' | debconf-set-selections \
 && dpkg --add-architecture i386 \
-&& apt-get update -y \
+&& apt-get update \
 && apt-get install -y --no-install-recommends libsdl2-2.0-0:i386 locales steamcmd \
 && ln -s /usr/games/steamcmd /usr/bin/steamcmd \
 && apt-get -y autoremove \
