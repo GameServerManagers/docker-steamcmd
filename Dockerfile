@@ -2,11 +2,6 @@ FROM ubuntu:22.04
 
 LABEL maintainer="LinuxGSM <me@danielgibbs.co.uk>"
 
-## Upgrade Ubuntu
-RUN echo "**** apt upgrade ****" \
-    && apt-get update; \
-    apt-get upgrade -y
-
 # Install UTF-8 unicode
 RUN echo "**** Install UTF-8 ****" \
     && apt-get update \
