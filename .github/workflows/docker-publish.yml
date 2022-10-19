@@ -28,10 +28,23 @@ jobs:
           registry: ghcr.io
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
-      - name: Build and push
+      - name: Build and push (Ubuntu 22.04)
         uses: docker/build-push-action@v3.2.0
         with:
           context: .
+          file: ./Dockerfile
+          platforms: linux/amd64
+          push: true
+          tags: |
+            gameservermanagers/steamcmd:latest
+            gameservermanagers/steamcmd:ubuntu-22.04
+            ghcr.io/gameservermanagers/steamcmd:latest
+            ghcr.io/gameservermanagers/steamcmd:ubuntu-22.04
+      - name: Build and push (Ubuntu 20.04)
+        uses: docker/build-push-action@v3.2.0
+        with:
+          context: .
+          file: ./Dockerfile.ubuntu-20.04
           platforms: linux/amd64
           push: true
           tags: |
