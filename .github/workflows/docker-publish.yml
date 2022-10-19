@@ -48,7 +48,5 @@ jobs:
           platforms: linux/amd64
           push: true
           tags: |
-            gameservermanagers/steamcmd:latest
-            gameservermanagers/steamcmd:ubuntu-22.04
-            ghcr.io/gameservermanagers/steamcmd:latest
-            ghcr.io/gameservermanagers/steamcmd:ubuntu-22.04
+            gameservermanagers/steamcmd:ubuntu-20.04
+            ghcr.io/gameservermanagers/steamcmd:ubuntu-20.04
