@@ -32,7 +32,7 @@ jobs:
         uses: docker/build-push-action@v3.2.0
         with:
           context: .
-          file: ./Dockerfile
+          file: ./Dockerfile.ubuntu-2204
           platforms: linux/amd64
           push: true
           tags: |
@@ -50,3 +50,13 @@ jobs:
           tags: |
             gameservermanagers/steamcmd:ubuntu-20.04
             ghcr.io/gameservermanagers/steamcmd:ubuntu-20.04
+      - name: Build and push (Ubuntu 18.04)
+        uses: docker/build-push-action@v3.2.0
+        with:
+          context: .
+          file: ./Dockerfile.ubuntu-1804
+          platforms: linux/amd64
+          push: true
+          tags: |
+            gameservermanagers/steamcmd:ubuntu-18.04
+            ghcr.io/gameservermanagers/steamcmd:ubuntu-18.04
