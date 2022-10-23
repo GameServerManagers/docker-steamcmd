@@ -35,3 +35,5 @@ RUN echo "**** Install SteamCMD ****" \
 # Update SteamCMD
 RUN steamcmd +quit
 
+ENTRYPOINT ["steamcmd"]
+CMD ["+help", "+quit"]
