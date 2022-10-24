@@ -1,4 +1,9 @@
 # SteamCMD Docker Image
+<p align="center">
+  <br>
+  <a href="[https://linuxgsm.com](https://developer.valvesoftware.com/wiki/SteamCMD)"><img src="https://user-images.githubusercontent.com/4478206/197491064-8cd6ad22-31b6-4219-935a-c24393fbc44c.jpg" alt="SteamCMD"></a>
+  
+
 
 [![Docker Pulls](https://img.shields.io/docker/pulls/gameservermanagers/steamcmd.svg?style=flat-square&logo=docker&logoColor=white)](https://hub.docker.com/r/steamcmd/steamcmd)
 [![GitHub Workflow Status](https://img.shields.io/github/workflow/status/gameservermanagers/docker-steamcmd/Docker%20Publish?style=flat-square&logo=github&logoColor=white)](https://github.com/GameServerManagers/docker-steamcmd/actions)
@@ -30,6 +35,6 @@ Download Counter Strike: Global Offensive Dedicated Server to current host direc
 docker run -it -v $PWD:/data gameservermanagers/steamcmd:latest +force_install_dir /data +login anonymous +app_update 740 +quit
 ```
 
-# Notes
+## Notes
 
 This container is based off of the [steamcmd](https://github.com/steamcmd/docker) container and is primarily used for [LinuxGSM](https://linuxgsm.com) game servers.
