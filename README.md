@@ -2,8 +2,7 @@
 
 [![Docker Pulls](https://img.shields.io/docker/pulls/gameservermanagers/steamcmd.svg?style=flat-square&logo=docker&logoColor=white)](https://hub.docker.com/r/steamcmd/steamcmd)
 [![GitHub Workflow Status](https://img.shields.io/github/workflow/status/gameservermanagers/docker-steamcmd/Docker%20Publish?style=flat-square&logo=github&logoColor=white)](https://github.com/GameServerManagers/docker-steamcmd/actions)
-[![Codacy grade](https://img.shields.io/codacy/grade/42d400dcdd714ae080d77fcb40d00f1c?style=flat-square)](https://www.codacy.com/manual/GameServerManagers/docker-steamcmd)
-[![GitHub](https://img.shields.io/github/license/gameservermanagers/docker-steamcmd?style=flat-square)](https://www.codacy.com/gh/GameServerManagers/docker-steamcmd/dashboard)
+[![Codacy grade](https://img.shields.io/codacy/grade/42d400dcdd714ae080d77fcb40d00f1c?style=flat-square)](https://www.codacy.com/gh/GameServerManagers/docker-steamcmd/dashboard)
 [![Discord](https://img.shields.io/discord/127498813903601664?color=7289da&logo=discord&logoColor=white&style=flat-square&label=discord)](https://linuxgsm.com/discord)
 [![SteamCMD](https://img.shields.io/badge/SteamCMD-000000?style=flat-square&logo=Steam&logoColor=white)](https://developer.valvesoftware.com/wiki/SteamCMD)
 [![GitHub](https://img.shields.io/github/license/gameservermanagers/docker-steamcmd?style=flat-square)](https://github.com/GameServerManagers/docker-steamcmd/blob/main/LICENSE)
