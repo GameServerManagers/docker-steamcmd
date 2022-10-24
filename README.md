@@ -30,6 +30,6 @@ Download Counter Strike: Global Offensive Dedicated Server to current host direc
 docker run -it -v $PWD:/data gameservermanagers/steamcmd:latest +force_install_dir /data +login anonymous +app_update 740 +quit
 ```
 
-# notes
+# Notes
 
 This container is based off of the [steamcmd](https://github.com/steamcmd/docker) container and is primarily used for [LinuxGSM](https://linuxgsm.com) game servers.
