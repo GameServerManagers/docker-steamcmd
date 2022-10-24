@@ -10,6 +10,9 @@
 <a href="https://developer.valvesoftware.com/wiki/SteamCMD"><img src="https://img.shields.io/badge/SteamCMD-000000?style=flat-square&amp;logo=Steam&amp;logoColor=white" alt="SteamCMD"></a>
 <a href="https://github.com/GameServerManagers/docker-steamcmd/blob/main/LICENSE"><img src="https://img.shields.io/github/license/gameservermanagers/docker-steamcmd?style=flat-square" alt="GitHub"></a></p>
 
+## About
+SteamCMD is a command-line version of the Steam client. It allows you to download and install games on a headless server. This container image builds daily and is available on [Docker Hub](https://hub.docker.com/r/gameservermanagers/steamcmd) as well as [GitHub Container Registry](https://github.com/GameServerManagers/docker-steamcmd/pkgs/container/steamcmd).
+
 ## Tags
 
 - `latest`, `ubuntu` - Latest Ubuntu LTS release
