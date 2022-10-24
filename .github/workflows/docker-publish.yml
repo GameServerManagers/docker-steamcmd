@@ -3,6 +3,8 @@ name: Docker Publish
 on:
   push:
     branches: ["main", "master"]
+    paths:
+      - Dockerfile*
   schedule:
     - cron: "0 22 * * *"
 
