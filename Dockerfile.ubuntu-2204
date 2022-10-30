@@ -2,6 +2,7 @@ FROM ubuntu:22.04
 
 LABEL maintainer="LinuxGSM <me@danielgibbs.co.uk>"
 ARG DEBIAN_FRONTEND=noninteractive
+SHELL ["/bin/bash", "-o", "pipefail", "-c"]
 
 # Install SteamCMD
 RUN echo "**** Install SteamCMD ****" \
