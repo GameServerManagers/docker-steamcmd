@@ -24,8 +24,5 @@ RUN locale-gen en_US.UTF-8
 ENV LANG 'en_US.UTF-8'
 ENV LANGUAGE 'en_US:en'
 
-# Update SteamCMD
-RUN steamcmd +quit
-
 ENTRYPOINT ["steamcmd"]
 CMD ["+help", "+quit"]
