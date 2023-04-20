@@ -1,4 +1,4 @@
-FROM ubuntu:22.04
+FROM ubuntu:kinetic
 
 LABEL maintainer="LinuxGSM <me@danielgibbs.co.uk>"
 ARG DEBIAN_FRONTEND=noninteractive
