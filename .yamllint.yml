@@ -6,4 +6,4 @@ rules:
   comments: disable
 
 ignore: |
-  .github/workflows
+  .github
