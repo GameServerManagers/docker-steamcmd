@@ -1,14 +1,9 @@
 # Set update schedule for GitHub Actions
+---
 version: 2
 updates:
   - package-ecosystem: "github-actions"
     directory: "/"
     schedule:
-      interval: "daily"
-
-  - package-ecosystem: "docker"
-    # Look for a `Dockerfile` in the `root` directory
-    directory: "/"
-    # Check for updates once a week
-    schedule:
+      # Check for updates to GitHub Actions every weekday
       interval: "weekly"
