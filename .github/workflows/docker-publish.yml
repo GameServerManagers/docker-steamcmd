@@ -133,3 +133,16 @@ jobs:
           tags: |
             gameservermanagers/steamcmd:ubuntu-18.04
             ghcr.io/gameservermanagers/steamcmd:ubuntu-18.04
+
+  package-cleanup:
+    name: Cleanup Old GitHub Packages
+    needs: [ build-ubuntu-1804, build-ubuntu-2004, build-ubuntu-2204 ]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Delete Package Versions
+        uses: actions/delete-package-versions@v4
+        with:
+          package-name: steamcmd
+          package-type: container
+          min-versions-to-keep: 1
+          delete-only-untagged-versions: true
