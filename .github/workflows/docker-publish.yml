@@ -74,13 +74,7 @@ jobs:
       - name: Setup QEMU
         uses: docker/setup-qemu-action@v3
 
-      - name: Setup Docker Buildx
-        uses: docker/setup-buildx-action@v3
-
-      - name: Build
-        run: docker build -t gameservermanagers/steamcmd:ubuntu-22.04 -f ./Dockerfile.ubuntu-2204 .
-
-      - name: Login to DockerHub
+      - name: Login to Docker Hub
         uses: docker/login-action@v3
         with:
           username: ${{ secrets.DOCKER_HUB_USERNAME }}
@@ -93,6 +87,18 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
+      - name: Extract metadata (tags, labels) for Docker
+        id: meta
+        uses: docker/metadata-action@v5
+        with:
+          images: |
+            gameservermanagers/steamcmd
+            ghcr.io/gameservermanagers/steamcmd
+          tags: |
+            latest
+            ubuntu
+            ubuntu-22.04
+
       - name: Build and push (Ubuntu 22.04)
         uses: docker/build-push-action@v6
         with:
@@ -100,9 +106,9 @@ jobs:
           file: ./Dockerfile.ubuntu-2204
           platforms: linux/amd64
           push: true
-          tags: |
-            gameservermanagers/steamcmd:ubuntu-22.04
-            ghcr.io/gameservermanagers/steamcmd:ubuntu-22.04
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
+
 
   build-ubuntu-2004:
     name: Build Ubuntu 20.04
@@ -119,14 +125,8 @@ jobs:
       - name: Setup QEMU
         uses: docker/setup-qemu-action@v3
 
-      - name: Setup Docker Buildx
-        uses: docker/setup-buildx-action@v3
-
-      - name: Build
-        run: docker build -t gameservermanagers/steamcmd:ubuntu-20.04 -f ./Dockerfile.ubuntu-2004 .
-
-      - name: Login to DockerHub
-        uses: docker/login-action@v3.3.0
+      - name: Login to Docker Hub
+        uses: docker/login-action@v3
         with:
           username: ${{ secrets.DOCKER_HUB_USERNAME }}
           password: ${{ secrets.DOCKER_HUB_ACCESS_TOKEN }}
@@ -137,6 +137,18 @@ jobs:
           registry: ghcr.io
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Extract metadata (tags, labels) for Docker
+        id: meta
+        uses: docker/metadata-action@v5
+        with:
+          images: |
+            gameservermanagers/steamcmd
+            ghcr.io/gameservermanagers/steamcmd
+          tags: |
+            latest
+            ubuntu
+            ubuntu-20.04
 
       - name: Build and push (Ubuntu 20.04)
         uses: docker/build-push-action@v6
@@ -145,53 +157,12 @@ jobs:
           file: ./Dockerfile.ubuntu-2004
           platforms: linux/amd64
           push: true
-          tags: |
-            gameservermanagers/steamcmd:ubuntu-20.04
-            ghcr.io/gameservermanagers/steamcmd:ubuntu-20.04
-
-  build-ubuntu-1804:
-    name: Build Ubuntu 18.04
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-
-      - name: Setup QEMU
-        uses: docker/setup-qemu-action@v3
-
-      - name: Setup Docker Buildx
-        uses: docker/setup-buildx-action@v3
-
-      - name: Build
-        run: docker build -t gameservermanagers/steamcmd:ubuntu-18.04 -f  ./Dockerfile.ubuntu-1804 .
-
-      - name: Login to DockerHub
-        uses: docker/login-action@v3.3.0
-        with:
-          username: ${{ secrets.DOCKER_HUB_USERNAME }}
-          password: ${{ secrets.DOCKER_HUB_ACCESS_TOKEN }}
-
-      - name: Login to GitHub Container Registry
-        uses: docker/login-action@v3
-        with:
-          registry: ghcr.io
-          username: ${{ github.actor }}
-          password: ${{ secrets.GITHUB_TOKEN }}
-
-      - name: Build and push (Ubuntu 18.04)
-        uses: docker/build-push-action@v6
-        with:
-          context: .
-          file: ./Dockerfile.ubuntu-1804
-          platforms: linux/amd64
-          push: true
-          tags: |
-            gameservermanagers/steamcmd:ubuntu-18.04
-            ghcr.io/gameservermanagers/steamcmd:ubuntu-18.04
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
 
   package-cleanup:
     name: Cleanup Old GitHub Packages
-    needs: [ build-ubuntu-1804, build-ubuntu-2004, build-ubuntu-2204, build-ubuntu-2404 ]
+    needs: [ build-ubuntu-2004, build-ubuntu-2204, build-ubuntu-2404 ]
     runs-on: ubuntu-latest
     steps:
       - name: Delete Package Versions
