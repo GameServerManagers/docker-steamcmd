@@ -59,7 +59,13 @@ jobs:
             file: ./Dockerfile.ubuntu-2404
             platforms: linux/amd64
             push: true
-            tags: ${{ steps.meta.outputs.tags }}
+            tags: |
+              gameservermanagers/steamcmd:latest
+              gameservermanagers/steamcmd:ubuntu
+              gameservermanagers/steamcmd:ubuntu-24.04
+              ghcr.io/gameservermanagers/steamcmd:latest
+              ghcr.io/gameservermanagers/steamcmd:ubuntu
+              ghcr.io/gameservermanagers/steamcmd:ubuntu-24.04
 
   build-ubuntu-2204:
     name: Build Ubuntu 22.04
