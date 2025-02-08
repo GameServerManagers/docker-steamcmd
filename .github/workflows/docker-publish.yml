@@ -48,6 +48,10 @@ jobs:
               ghcr.io/gameservermanagers/steamcmd:latest
               ghcr.io/gameservermanagers/steamcmd:ubuntu
               ghcr.io/gameservermanagers/steamcmd:ubuntu-24.04
+            tags: |
+              type=ref,event=branch
+              type=ref,event=pr
+              type=semver,pattern={{version}}
 
         - name: Build and push (Ubuntu 24.04)
           uses: docker/build-push-action@v6
