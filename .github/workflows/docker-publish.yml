@@ -42,12 +42,8 @@ jobs:
           uses: docker/metadata-action@v5
           with:
             images: |
-              gameservermanagers/steamcmd:latest
-              gameservermanagers/steamcmd:ubuntu
-              gameservermanagers/steamcmd:ubuntu-24.04
-              ghcr.io/gameservermanagers/steamcmd:latest
-              ghcr.io/gameservermanagers/steamcmd:ubuntu
-              ghcr.io/gameservermanagers/steamcmd:ubuntu-24.04
+              gameservermanagers/steamcmd
+              ghcr.io/gameservermanagers/steamcmd
             tags: |
               latest
               ubuntu
