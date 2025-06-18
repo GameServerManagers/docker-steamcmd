@@ -170,7 +170,7 @@ jobs:
           delete-only-untagged-versions: true
 
   workflow-keepalive:
-    if: github.event_name == 'schedule'
+    # if: github.event_name == 'schedule'
     runs-on: ubuntu-latest
     permissions:
       actions: write
