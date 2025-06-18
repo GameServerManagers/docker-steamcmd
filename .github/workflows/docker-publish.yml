@@ -168,3 +168,10 @@ jobs:
           package-type: container
           min-versions-to-keep: 1
           delete-only-untagged-versions: true
+
+  keepalive-workflow:
+    name: Keepalive Workflow
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: gautamkrishnar/keepalive-workflow@v2 # using the workflow with default settings
