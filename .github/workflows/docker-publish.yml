@@ -175,4 +175,4 @@ jobs:
     permissions:
       actions: write
     steps:
-      - uses: liskin/gh-workflow-keepalive@v1 using the workflow with default settings
+      - uses: liskin/gh-workflow-keepalive@v1
