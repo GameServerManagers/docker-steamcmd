@@ -23,5 +23,6 @@
         "yzhang.markdown-all-in-one"
       ]
     }
-  }
+  },
+  "postCreateCommand": "npm init -y >/dev/null 2>&1 || true && npm install --no-save prettier prettier-plugin-sh prettier-plugin-jinja-template"
 }
