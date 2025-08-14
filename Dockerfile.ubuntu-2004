@@ -15,9 +15,8 @@ RUN echo "**** Install SteamCMD ****" \
   && ln -s /usr/games/steamcmd /usr/bin/steamcmd \
   && apt-get -y autoremove \
   && apt-get -y clean \
-  && rm -rf /var/lib/apt/lists/* \
-  && rm -rf /tmp/* \
-  && rm -rf /var/tmp/*
+  && rm -rf /usr/share/man /usr/share/doc /usr/share/info /usr/share/lintian /usr/share/locale/* \
+  && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
 # Add unicode support
 RUN locale-gen en_US.UTF-8
