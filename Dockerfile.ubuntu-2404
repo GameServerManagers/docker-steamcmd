@@ -34,13 +34,6 @@ RUN locale-gen en_US.UTF-8
 ENV LANG=en_US.UTF-8
 ENV LANGUAGE=en_US:en
 
-# Create non-root user
-RUN useradd -m -d /home/steam -s /bin/bash steam \
-  && mkdir -p /home/steam/Steam \
-  && chown -R steam:steam /home/steam
-USER steam
-WORKDIR /home/steam
-
 ENTRYPOINT ["steamcmd"]
 CMD ["+help", "+quit"]
 
