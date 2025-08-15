@@ -1,7 +1,18 @@
 FROM ubuntu:20.04
 
-LABEL maintainer="LinuxGSM <me@danielgibbs.co.uk>"
 ARG DEBIAN_FRONTEND=noninteractive
+ARG BUILD_DATE
+ARG VCS_REF
+
+LABEL maintainer="LinuxGSM <me@danielgibbs.co.uk>" \
+  org.opencontainers.image.title="SteamCMD" \
+  org.opencontainers.image.description="SteamCMD headless image for acquiring dedicated server files" \
+  org.opencontainers.image.url="https://github.com/GameServerManagers/docker-steamcmd" \
+  org.opencontainers.image.source="https://github.com/GameServerManagers/docker-steamcmd" \
+  org.opencontainers.image.vendor="GameServerManagers" \
+  org.opencontainers.image.licenses="MIT" \
+  org.opencontainers.image.created=$BUILD_DATE \
+  org.opencontainers.image.revision=$VCS_REF
 
 SHELL ["/bin/bash", "-o", "pipefail", "-c"]
 
