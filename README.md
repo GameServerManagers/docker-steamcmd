@@ -22,7 +22,7 @@ SteamCMD is a command-line version of the Steam client. It allows you to downloa
 
 ## Usage
 
-docker cli
+Docker cli
 
 ```bash
 docker run -it gameservermanagers/steamcmd:latest
