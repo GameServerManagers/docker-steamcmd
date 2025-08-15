@@ -1,6 +1,8 @@
 FROM ubuntu:24.04
 
 ARG DEBIAN_FRONTEND=noninteractive
+ARG PUID=1000
+ARG PGID=1000
 ARG BUILD_DATE
 ARG VCS_REF
 
@@ -35,7 +37,8 @@ ENV LANG=en_US.UTF-8
 ENV LANGUAGE=en_US:en
 
 # Create non-root user
-RUN useradd -m -d /home/steam -s /bin/bash steam \
+RUN groupadd -g "${PGID}" steam \
+  && useradd -l -u "${PUID}" -g steam -m -d /home/steam -s /bin/bash steam \
   && mkdir -p /home/steam/Steam \
   && chown -R steam:steam /home/steam
 USER steam
