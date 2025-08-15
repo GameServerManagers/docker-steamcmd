@@ -24,17 +24,22 @@ RUN echo "**** Install SteamCMD ****" \
   && echo steam steam/license note '' | debconf-set-selections \
   && dpkg --add-architecture i386 \
   && apt-get update \
-  && apt-get install -y --no-install-recommends ca-certificates locales lib32gcc-s1 libsdl2-2.0-0:i386 tzdata steamcmd \
+  && apt-get install -y --no-install-recommends \
+  ca-certificates \
+  locales \
+  lib32gcc-s1 \
+  libsdl2-2.0-0:i386 \
+  tzdata \
+  steamcmd \
   && ln -s /usr/games/steamcmd /usr/bin/steamcmd \
+  && locale-gen en_US.UTF-8 \
   && apt-get -y autoremove \
   && apt-get -y clean \
   && rm -rf /usr/share/man /usr/share/doc /usr/share/info /usr/share/lintian /usr/share/locale/* \
   && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
 # Add unicode support
-RUN locale-gen en_US.UTF-8
 ENV LANG=en_US.UTF-8
-ENV LANGUAGE=en_US:en
 
 # Create non-root user/group with configurable IDs
 RUN groupadd -g "${PGID}" steam \
@@ -46,6 +51,3 @@ WORKDIR /home/steam
 
 ENTRYPOINT ["steamcmd"]
 CMD ["+help", "+quit"]
-
-# Basic health check: run a no-op steamcmd help then quit
-HEALTHCHECK --interval=30m --timeout=30s --start-period=30s --retries=3 CMD steamcmd +login anonymous +app_info_update 1 +quit > /dev/null 2>&1 || exit 1
