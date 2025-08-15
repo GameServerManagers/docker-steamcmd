@@ -32,15 +32,14 @@ RUN echo "**** Install SteamCMD ****" \
   tzdata \
   steamcmd \
   && ln -s /usr/games/steamcmd /usr/bin/steamcmd \
+  && locale-gen en_US.UTF-8 \
   && apt-get -y autoremove \
   && apt-get -y clean \
   && rm -rf /usr/share/man /usr/share/doc /usr/share/info /usr/share/lintian /usr/share/locale/* \
   && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
 # Add unicode support
-RUN locale-gen en_US.UTF-8
 ENV LANG=en_US.UTF-8
-ENV LANGUAGE=en_US:en
 
 ENTRYPOINT ["steamcmd"]
 CMD ["+help", "+quit"]
