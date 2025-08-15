@@ -1,8 +1,9 @@
 FROM ubuntu:24.04
 
+## Remove ubuntu user added in 24.04 by default
+RUN touch /var/mail/ubuntu && chown ubuntu /var/mail/ubuntu && userdel -r ubuntu
+
 ARG DEBIAN_FRONTEND=noninteractive
-ARG PUID=1000
-ARG PGID=1000
 ARG BUILD_DATE
 ARG VCS_REF
 
