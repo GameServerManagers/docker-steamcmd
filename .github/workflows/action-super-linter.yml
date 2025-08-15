@@ -2,6 +2,7 @@
 name: Super Linter
 
 on:
+  workflow_dispatch:
   push:
     branches:
       - "*"
