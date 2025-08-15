@@ -24,7 +24,13 @@ RUN echo "**** Install SteamCMD ****" \
   && echo steam steam/license note '' | debconf-set-selections \
   && dpkg --add-architecture i386 \
   && apt-get update \
-  && apt-get install -y --no-install-recommends ca-certificates locales lib32gcc1 libsdl2-2.0-0:i386 tzdata steamcmd \
+  && apt-get install -y --no-install-recommends \
+  ca-certificates \
+  locales \
+  lib32gcc-s1 \
+  libsdl2-2.0-0:i386 \
+  tzdata \
+  steamcmd \
   && ln -s /usr/games/steamcmd /usr/bin/steamcmd \
   && apt-get -y autoremove \
   && apt-get -y clean \
@@ -38,6 +44,3 @@ ENV LANGUAGE=en_US:en
 
 ENTRYPOINT ["steamcmd"]
 CMD ["+help", "+quit"]
-
-# Basic health check: run a no-op steamcmd help then quit
-HEALTHCHECK --interval=30m --timeout=30s --start-period=30s --retries=3 CMD steamcmd +login anonymous +app_info_update 1 +quit > /dev/null 2>&1 || exit 1
