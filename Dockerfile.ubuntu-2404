@@ -52,5 +52,8 @@ RUN groupadd -g "${PGID}" steam \
 USER steam
 WORKDIR /home/steam
 
+# Bootstrap SteamCMD
+RUN steamcmd +login anonymous +quit || true
+
 ENTRYPOINT ["steamcmd"]
 CMD ["+help", "+quit"]
