@@ -197,10 +197,6 @@ Common commands / flags you can chain after the image name (order matters; see n
 - For workshop items, ensure the base app (server) is installed first; workshop content lands under the app's workshop directory.
 - `+download_depot` may require authenticated login and correct branch access; manifests are version-specific.
 
-## Notes
-
-This container is based off of the [steamcmd](https://github.com/steamcmd/docker) container and is primarily used for [LinuxGSM](https://linuxgsm.com) game servers.
-
 ## FAQ
 
 **Q: How do I find an appid?**
@@ -214,3 +210,7 @@ Yes, either chain multiple `+app_update` commands or use a runscript file with o
 
 **Q: Do I need to expose any ports?**
 No for downloading content. Game server ports are handled by the separate server container you build/run using the downloaded files.
+
+## Notes
+
+This container is based off of the [steamcmd](https://github.com/steamcmd/docker) container and is primarily used for [LinuxGSM](https://linuxgsm.com) game servers.
