@@ -184,7 +184,7 @@ Common commands / flags you can chain after the image name (order matters; see n
 | `+app_info_update 1`                           | Refresh app info cache (used before querying details)               | `+app_info_update 1`                           |
 | `+workshop_download_item <appid> <itemid>`     | Download a specific workshop item                                   | `+workshop_download_item 4020 3418671232`      |
 | `+download_depot <appid> <depotid> <manifest>` | Fetch a specific depot/manifest (version pinning)                   | `+download_depot 90 90 402078904020789`        |
-| `+sSteamCmdForcePlatformType <os>`             | Force platform (linux / windows / macos) for content                | `+sSteamCmdForcePlatformType windows`          |
+| `+sSteamCmdForcePlatformType <os>`             | Force platform (Linux / Windows / macOS) for content                | `+sSteamCmdForcePlatformType windows`          |
 | `+runscript <file>`                            | Execute batch of commands from script file                          | `+runscript /scripts/install.txt`              |
 | `+quit`                                        | Exit steamcmd when previous commands complete                       | `+quit`                                        |
 
