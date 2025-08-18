@@ -58,7 +58,7 @@ Using a distinct mount (e.g. `/data`) along with `+force_install_dir /data` keep
 docker run -it --rm \
   -e PUID=$(id -u) -e PGID=$(id -g) \
   -v "$PWD:/data" \
-  -v /path/on/host/steamcmd-app:/home/steam/.local/share/Steam \
+  -v "/path/on/host/steamcmd-app:/home/steam/.local/share/Steam" \
   gameservermanagers/steamcmd:latest \
   +force_install_dir /data +login anonymous +app_update 4020 +quit
 ```
@@ -70,7 +70,7 @@ docker volume create steamcmd-data
 docker volume create steamcmd-app
 docker run -it --rm \
   -v "steamcmd-data:/data" \
-  -v steamcmd-app:/home/steam/.local/share/Steam \
+  -v "steamcmd-app:/home/steam/.local/share/Steam" \
   gameservermanagers/steamcmd:latest \
   +force_install_dir /data +login anonymous +app_update 4020 +quit
 ```
