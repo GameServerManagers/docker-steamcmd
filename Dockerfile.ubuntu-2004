@@ -1,6 +1,8 @@
 FROM ubuntu:20.04
 
 ARG DEBIAN_FRONTEND=noninteractive
+ARG PUID=1000
+ARG PGID=1000
 ARG BUILD_DATE
 ARG VCS_REF
 
@@ -29,6 +31,7 @@ RUN echo "**** Install SteamCMD ****" \
   libsdl2-2.0-0:i386 \
   tzdata \
   steamcmd \
+  gosu \
   && ln -s /usr/games/steamcmd /usr/bin/steamcmd \
   && locale-gen en_US.UTF-8 \
   && apt-get -y autoremove \
@@ -39,5 +42,20 @@ RUN echo "**** Install SteamCMD ****" \
 # Add unicode support
 ENV LANG=en_US.UTF-8
 
-ENTRYPOINT ["steamcmd"]
+# Create non-root user (default IDs; can be adjusted at runtime by entrypoint)
+RUN groupadd -g "${PGID}" steam \
+  && useradd -l -u "${PUID}" -g steam -m -d /home/steam -s /bin/bash steam \
+  && mkdir -p /home/steam/Steam \
+  && chown -R steam:steam /home/steam
+
+WORKDIR /home/steam
+
+# Bootstrap SteamCMD as steam user
+RUN su -s /bin/bash - steam -c 'steamcmd +login anonymous +quit || true'
+
+# Copy entrypoint
+COPY docker-entrypoint.sh /docker-entrypoint.sh
+RUN chmod +x /docker-entrypoint.sh
+
+ENTRYPOINT ["/docker-entrypoint.sh"]
 CMD ["+help", "+quit"]
