@@ -1,0 +1,64 @@
+FROM ubuntu:26.04
+
+## Remove ubuntu user added by default
+RUN touch /var/mail/ubuntu && chown ubuntu /var/mail/ubuntu && userdel -r ubuntu
+
+ARG DEBIAN_FRONTEND=noninteractive
+ARG PUID=1000
+ARG PGID=1000
+ARG BUILD_DATE
+ARG VCS_REF
+
+LABEL maintainer="LinuxGSM <me@danielgibbs.co.uk>" \
+  org.opencontainers.image.title="SteamCMD" \
+  org.opencontainers.image.description="SteamCMD headless image for acquiring dedicated server files" \
+  org.opencontainers.image.url="https://github.com/GameServerManagers/docker-steamcmd" \
+  org.opencontainers.image.source="https://github.com/GameServerManagers/docker-steamcmd" \
+  org.opencontainers.image.vendor="GameServerManagers" \
+  org.opencontainers.image.licenses="MIT" \
+  org.opencontainers.image.created=$BUILD_DATE \
+  org.opencontainers.image.revision=$VCS_REF
+
+SHELL ["/bin/bash", "-o", "pipefail", "-c"]
+
+# Install SteamCMD
+RUN echo "**** Install SteamCMD ****" \
+  && echo steam steam/question select "I AGREE" | debconf-set-selections \
+  && echo steam steam/license note '' | debconf-set-selections \
+  && dpkg --add-architecture i386 \
+  && apt-get update \
+  && apt-get install -y --no-install-recommends \
+  ca-certificates \
+  locales \
+  lib32gcc-s1 \
+  libsdl2-2.0-0:i386 \
+  tzdata \
+  steamcmd \
+  gosu \
+  && ln -s /usr/games/steamcmd /usr/bin/steamcmd \
+  && locale-gen en_US.UTF-8 \
+  && apt-get -y autoremove \
+  && apt-get -y clean \
+  && rm -rf /usr/share/man /usr/share/doc /usr/share/info /usr/share/lintian /usr/share/locale/* \
+  && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
+
+# Add unicode support
+ENV LANG=en_US.UTF-8
+
+# Create non-root user (default IDs; can be adjusted at runtime by entrypoint)
+RUN groupadd -g "${PGID}" steam \
+  && useradd -l -u "${PUID}" -g steam -m -d /home/steam -s /bin/bash steam \
+  && mkdir -p /home/steam/Steam \
+  && chown -R steam:steam /home/steam
+
+WORKDIR /home/steam
+
+# Bootstrap SteamCMD as steam user
+RUN su -s /bin/bash - steam -c 'steamcmd +login anonymous +quit || true'
+
+# Copy entrypoint
+COPY docker-entrypoint.sh /docker-entrypoint.sh
+RUN chmod +x /docker-entrypoint.sh
+
+ENTRYPOINT ["/docker-entrypoint.sh"]
+CMD ["+help", "+quit"]

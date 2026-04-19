@@ -15,12 +15,13 @@ SteamCMD is a command-line version of the Steam client. It allows you to downloa
 
 ## Tags
 
-| Tag(s)             | Ubuntu Release              | Standard Support Ends\* | Notes                              |
-| ------------------ | --------------------------- | ----------------------- | ---------------------------------- |
-| `latest`, `ubuntu` | 24.04 LTS (Noble)           | April 2029              | Current LTS                        |
-| `ubuntu-24.04`     | 24.04 LTS (Noble Numbat)    | April 2029              | Current LTS                        |
-| `ubuntu-22.04`     | 22.04 LTS (Jammy Jackalope) | April 2027              | Previous LTS                       |
-| `ubuntu-20.04`     | 20.04 LTS (Focal Fossa)     | April 2025              | Legacy (receives security updates) |
+| Tag(s)             | Ubuntu Release                   | Standard Support Ends\* | Notes                              |
+| ------------------ | -------------------------------- | ----------------------- | ---------------------------------- |
+| `latest`, `ubuntu` | 24.04 LTS (Noble Numbat)         | April 2029              | Current LTS                        |
+| `ubuntu-26.04`     | 26.04 LTS (Resolute Raccoon)     | April 2031              | Upcoming LTS                       |
+| `ubuntu-24.04`     | 24.04 LTS (Noble Numbat)         | April 2029              | Current LTS                        |
+| `ubuntu-22.04`     | 22.04 LTS (Jammy Jellyfish)      | April 2027              | Previous LTS                       |
+| `ubuntu-20.04`     | 20.04 LTS (Focal Fossa)          | April 2025              | Legacy (ESM only; may be removed)  |
 
 \*Dates are end of standard (free) security updates per Canonical's published LTS schedule. Extended Security Maintenance (ESM) may continue beyond these dates, but images may be deprecated earlier if upstream packages (e.g. SteamCMD dependencies) become unavailable.
 
@@ -50,7 +51,7 @@ SteamCMD stores its own library data (manifests, depots, workshop cache) in `/ho
 /home/steam/.local/share/Steam/steamapps/common/<AppName>
 ```
 
-Using a distinct mount (e.g. `/data`) along with `+force_install_dir /data` keeps app files seperate from the Steam library cache.
+Using a distinct mount (e.g. `/data`) along with `+force_install_dir /data` keeps app files separate from the Steam library cache.
 
 ### Bind Mount Example
 
