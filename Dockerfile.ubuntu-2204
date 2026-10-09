@@ -37,6 +37,7 @@ RUN echo "**** Install SteamCMD ****" \
   && apt-get -y autoremove \
   && apt-get -y clean \
   && rm -rf /usr/share/man /usr/share/doc /usr/share/info /usr/share/lintian /usr/share/locale/* \
+  && mkdir -p /usr/share/man/man1 \
   && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
 # Add unicode support
