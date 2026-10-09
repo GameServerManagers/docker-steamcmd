@@ -37,6 +37,9 @@ RUN echo "**** Install SteamCMD ****" \
   && apt-get -y autoremove \
   && apt-get -y clean \
   && rm -rf /usr/share/man /usr/share/doc /usr/share/info /usr/share/lintian /usr/share/locale/* \
+  # Keep an empty man1 folder like stock Ubuntu: Java packages register their
+  # man page link there and fail to install without it
+  && mkdir -p /usr/share/man/man1 \
   && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
 # Add unicode support
