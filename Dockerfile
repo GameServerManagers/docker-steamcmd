@@ -27,13 +27,13 @@ RUN echo "**** Install SteamCMD ****" \
   && dpkg --add-architecture i386 \
   && apt-get update \
   && apt-get install -y --no-install-recommends \
-  ca-certificates \
-  locales \
-  lib32gcc-s1 \
-  libsdl2-2.0-0:i386 \
-  tzdata \
-  steamcmd \
-  gosu \
+    ca-certificates \
+    locales \
+    lib32gcc-s1 \
+    libsdl2-2.0-0:i386 \
+    tzdata \
+    steamcmd \
+    gosu \
   && ln -s /usr/games/steamcmd /usr/bin/steamcmd \
   && locale-gen en_US.UTF-8 \
   && apt-get -y autoremove \
