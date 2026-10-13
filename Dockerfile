@@ -15,7 +15,7 @@ LABEL maintainer="LinuxGSM <me@danielgibbs.co.uk>" \
 
 SHELL ["/bin/bash", "-o", "pipefail", "-c"]
 
-# Remove the default ubuntu user (24.04+) so UID/GID 1000 is free for steam
+# Remove ubuntu user if present
 RUN if id ubuntu >/dev/null 2>&1; then \
   touch /var/mail/ubuntu && chown ubuntu /var/mail/ubuntu && userdel -r ubuntu; \
   fi
@@ -51,7 +51,7 @@ RUN groupadd -g "${PGID}" steam \
 
 WORKDIR /home/steam
 
-# Bootstrap SteamCMD as steam user (data lives in /home/steam/.local/share/Steam)
+# Bootstrap SteamCMD as steam user
 RUN su -s /bin/bash - steam -c 'steamcmd +login anonymous +quit || true'
 
 # Copy entrypoint
