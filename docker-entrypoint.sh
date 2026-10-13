@@ -1,6 +1,15 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
+# Started with --user (non-root): UID/GID remapping is not possible, so run
+# steamcmd directly as whatever user we were given.
+if [[ "$(id -u)" -ne 0 ]]; then
+  if [[ -n "${PUID:-}" || -n "${PGID:-}" ]]; then
+    echo "Warning: PUID/PGID ignored when the container is started with --user" >&2
+  fi
+  exec steamcmd "$@"
+fi
+
 # Allow runtime override of steam user UID/GID via PUID/PGID env vars.
 # If they differ from current numeric IDs, we modify /etc/passwd & /etc/group accordingly
 # before executing steamcmd. This requires the container to start as root.
