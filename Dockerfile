@@ -1,10 +1,9 @@
-FROM ubuntu:20.04
+ARG UBUNTU_VERSION=26.04
+FROM ubuntu:${UBUNTU_VERSION}
 
 ARG DEBIAN_FRONTEND=noninteractive
 ARG PUID=1000
 ARG PGID=1000
-ARG BUILD_DATE
-ARG VCS_REF
 
 LABEL maintainer="LinuxGSM <me@danielgibbs.co.uk>" \
   org.opencontainers.image.title="SteamCMD" \
@@ -12,11 +11,14 @@ LABEL maintainer="LinuxGSM <me@danielgibbs.co.uk>" \
   org.opencontainers.image.url="https://github.com/GameServerManagers/docker-steamcmd" \
   org.opencontainers.image.source="https://github.com/GameServerManagers/docker-steamcmd" \
   org.opencontainers.image.vendor="GameServerManagers" \
-  org.opencontainers.image.licenses="MIT" \
-  org.opencontainers.image.created=$BUILD_DATE \
-  org.opencontainers.image.revision=$VCS_REF
+  org.opencontainers.image.licenses="MIT"
 
 SHELL ["/bin/bash", "-o", "pipefail", "-c"]
+
+# Remove the default ubuntu user (24.04+) so UID/GID 1000 is free for steam
+RUN if id ubuntu >/dev/null 2>&1; then \
+  touch /var/mail/ubuntu && chown ubuntu /var/mail/ubuntu && userdel -r ubuntu; \
+  fi
 
 # Install SteamCMD
 RUN echo "**** Install SteamCMD ****" \
@@ -45,13 +47,11 @@ ENV LANG=en_US.UTF-8
 
 # Create non-root user (default IDs; can be adjusted at runtime by entrypoint)
 RUN groupadd -g "${PGID}" steam \
-  && useradd -l -u "${PUID}" -g steam -m -d /home/steam -s /bin/bash steam \
-  && mkdir -p /home/steam/Steam \
-  && chown -R steam:steam /home/steam
+  && useradd -l -u "${PUID}" -g steam -m -d /home/steam -s /bin/bash steam
 
 WORKDIR /home/steam
 
-# Bootstrap SteamCMD as steam user
+# Bootstrap SteamCMD as steam user (data lives in /home/steam/.local/share/Steam)
 RUN su -s /bin/bash - steam -c 'steamcmd +login anonymous +quit || true'
 
 # Copy entrypoint

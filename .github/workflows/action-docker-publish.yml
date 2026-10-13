@@ -5,30 +5,60 @@ on:
     branches:
       - main
     paths:
-      - Dockerfile*
+      - Dockerfile
+      - docker-entrypoint.sh
+      - ubuntu-versions.json
+      - .github/workflows/action-docker-publish.yml
+  pull_request:
+    paths:
+      - Dockerfile
+      - docker-entrypoint.sh
+      - ubuntu-versions.json
+      - .github/workflows/action-docker-publish.yml
   schedule:
     - cron: "0 1 * * 6"
 
+permissions:
+  contents: read
+
 jobs:
-  build-ubuntu-2604:
-    name: Build Ubuntu 26.04
+  versions:
+    name: Read Ubuntu versions
+    runs-on: ubuntu-latest
+    outputs:
+      matrix: ${{ steps.read.outputs.matrix }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7
+
+      - name: Read ubuntu-versions.json
+        id: read
+        run: echo "matrix=$(jq -c . ubuntu-versions.json)" >> "$GITHUB_OUTPUT"
+
+  build:
+    name: Build Ubuntu ${{ matrix.version }}
+    needs: versions
     runs-on: ubuntu-latest
     permissions:
       packages: write
       contents: read
-      attestations: write
-      id-token: write
+    strategy:
+      fail-fast: false
+      matrix:
+        include: ${{ fromJSON(needs.versions.outputs.matrix) }}
     steps:
       - name: Checkout
         uses: actions/checkout@v7
 
       - name: Login to Docker Hub
+        if: github.event_name != 'pull_request'
         uses: docker/login-action@v4
         with:
           username: ${{ secrets.DOCKER_HUB_USERNAME }}
           password: ${{ secrets.DOCKER_HUB_ACCESS_TOKEN }}
 
       - name: Login to GitHub Container Registry
+        if: github.event_name != 'pull_request'
         uses: docker/login-action@v4
         with:
           registry: ghcr.io
@@ -42,151 +72,32 @@ jobs:
           images: |
             gameservermanagers/steamcmd
             ghcr.io/gameservermanagers/steamcmd
+          flavor: |
+            latest=false
           tags: |
-            ubuntu-26.04
+            type=raw,value=ubuntu-${{ matrix.version }}
+            type=raw,value=latest,enable=${{ matrix.latest }}
+            type=raw,value=ubuntu,enable=${{ matrix.latest }}
 
-      - name: Build and push (Ubuntu 26.04)
+      - name: Build (Ubuntu ${{ matrix.version }})
         uses: docker/build-push-action@v7
         with:
           context: .
-          file: ./Dockerfile.ubuntu-2604
+          build-args: UBUNTU_VERSION=${{ matrix.version }}
           platforms: linux/amd64
-          push: true
-          tags: ${{ steps.meta.outputs.tags }}
+          load: true
+          tags: steamcmd:test
           labels: ${{ steps.meta.outputs.labels }}
 
-  build-ubuntu-2404:
-    name: Build Ubuntu 24.04
-    runs-on: ubuntu-latest
-    permissions:
-      packages: write
-      contents: read
-      attestations: write
-      id-token: write
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v7
+      - name: Smoke test
+        run: docker run --rm steamcmd:test +login anonymous +app_info_update 1 +quit
 
-      - name: Login to Docker Hub
-        uses: docker/login-action@v4
-        with:
-          username: ${{ secrets.DOCKER_HUB_USERNAME }}
-          password: ${{ secrets.DOCKER_HUB_ACCESS_TOKEN }}
-
-      - name: Login to GitHub Container Registry
-        uses: docker/login-action@v4
-        with:
-          registry: ghcr.io
-          username: ${{ github.actor }}
-          password: ${{ secrets.GITHUB_TOKEN }}
-
-      - name: Extract metadata (tags, labels) for Docker
-        id: meta
-        uses: docker/metadata-action@v6
-        with:
-          images: |
-            gameservermanagers/steamcmd
-            ghcr.io/gameservermanagers/steamcmd
-          tags: |
-            latest
-            ubuntu
-            ubuntu-24.04
-
-      - name: Build and push (Ubuntu 24.04)
+      - name: Push (Ubuntu ${{ matrix.version }})
+        if: github.event_name != 'pull_request'
         uses: docker/build-push-action@v7
         with:
           context: .
-          file: ./Dockerfile.ubuntu-2404
-          platforms: linux/amd64
-          push: true
-          tags: ${{ steps.meta.outputs.tags }}
-          labels: ${{ steps.meta.outputs.labels }}
-
-  build-ubuntu-2204:
-    name: Build Ubuntu 22.04
-    runs-on: ubuntu-latest
-    permissions:
-      packages: write
-      contents: read
-      attestations: write
-      id-token: write
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v7
-
-      - name: Login to Docker Hub
-        uses: docker/login-action@v4
-        with:
-          username: ${{ secrets.DOCKER_HUB_USERNAME }}
-          password: ${{ secrets.DOCKER_HUB_ACCESS_TOKEN }}
-
-      - name: Login to GitHub Container Registry
-        uses: docker/login-action@v4
-        with:
-          registry: ghcr.io
-          username: ${{ github.actor }}
-          password: ${{ secrets.GITHUB_TOKEN }}
-
-      - name: Extract metadata (tags, labels) for Docker
-        id: meta
-        uses: docker/metadata-action@v6
-        with:
-          images: |
-            gameservermanagers/steamcmd
-            ghcr.io/gameservermanagers/steamcmd
-          tags: |
-            ubuntu-22.04
-
-      - name: Build and push (Ubuntu 22.04)
-        uses: docker/build-push-action@v7
-        with:
-          context: .
-          file: ./Dockerfile.ubuntu-2204
-          platforms: linux/amd64
-          push: true
-          tags: ${{ steps.meta.outputs.tags }}
-          labels: ${{ steps.meta.outputs.labels }}
-
-  build-ubuntu-2004:
-    name: Build Ubuntu 20.04
-    runs-on: ubuntu-latest
-    permissions:
-      packages: write
-      contents: read
-      attestations: write
-      id-token: write
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v7
-
-      - name: Login to Docker Hub
-        uses: docker/login-action@v4
-        with:
-          username: ${{ secrets.DOCKER_HUB_USERNAME }}
-          password: ${{ secrets.DOCKER_HUB_ACCESS_TOKEN }}
-
-      - name: Login to GitHub Container Registry
-        uses: docker/login-action@v4
-        with:
-          registry: ghcr.io
-          username: ${{ github.actor }}
-          password: ${{ secrets.GITHUB_TOKEN }}
-
-      - name: Extract metadata (tags, labels) for Docker
-        id: meta
-        uses: docker/metadata-action@v6
-        with:
-          images: |
-            gameservermanagers/steamcmd
-            ghcr.io/gameservermanagers/steamcmd
-          tags: |
-            ubuntu-20.04
-
-      - name: Build and push (Ubuntu 20.04)
-        uses: docker/build-push-action@v7
-        with:
-          context: .
-          file: ./Dockerfile.ubuntu-2004
+          build-args: UBUNTU_VERSION=${{ matrix.version }}
           platforms: linux/amd64
           push: true
           tags: ${{ steps.meta.outputs.tags }}
@@ -194,8 +105,11 @@ jobs:
 
   package-cleanup:
     name: Cleanup Old GitHub Packages
-    needs: [build-ubuntu-2004, build-ubuntu-2204, build-ubuntu-2404, build-ubuntu-2604]
+    needs: build
+    if: github.event_name != 'pull_request'
     runs-on: ubuntu-latest
+    permissions:
+      packages: write
     steps:
       - name: Delete Package Versions
         uses: actions/delete-package-versions@v5
