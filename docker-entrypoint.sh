@@ -1,8 +1,6 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-# Started with --user (non-root): UID/GID remapping is not possible, so run
-# steamcmd directly as whatever user we were given.
 if [[ "$(id -u)" -ne 0 ]]; then
   if [[ -n "${PUID:-}" || -n "${PGID:-}" ]]; then
     echo "Warning: PUID/PGID ignored when the container is started with --user" >&2
