@@ -38,10 +38,11 @@ Images are built for `linux/amd64` only. SteamCMD is an x86 binary and does not 
 
 These images are for testing LinuxGSM on other distros. They are not supported releases.
 
-| Tag(s)      | Release            |
-| ----------- | ------------------ |
-| `debian-13` | Debian 13 (Trixie) |
-| `rocky-9`   | Rocky Linux 9      |
+| Tag(s)      | Release              |
+| ----------- | -------------------- |
+| `debian-13` | Debian 13 (Trixie)   |
+| `debian-12` | Debian 12 (Bookworm) |
+| `rocky-9`   | Rocky Linux 9        |
 
 The Debian images enable the `contrib` and `non-free` components, because the `steamcmd` package is in `non-free`.
 
