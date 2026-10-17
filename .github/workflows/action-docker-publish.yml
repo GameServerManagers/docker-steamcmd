@@ -7,12 +7,14 @@ on:
     paths:
       - Dockerfile
       - docker-entrypoint.sh
+      - steamcmd-wrapper.sh
       - versions.json
       - .github/workflows/action-docker-publish.yml
   pull_request:
     paths:
       - Dockerfile
       - docker-entrypoint.sh
+      - steamcmd-wrapper.sh
       - versions.json
       - .github/workflows/action-docker-publish.yml
   schedule:
