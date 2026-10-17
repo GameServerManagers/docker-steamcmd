@@ -1,7 +1,9 @@
+# hadolint global ignore=DL3008,DL3041
 ARG DISTRO=ubuntu
 ARG DISTRO_VERSION=26.04
 ARG BASE_IMAGE=${DISTRO}:${DISTRO_VERSION}
 FROM ${BASE_IMAGE}
+# checkov:skip=CKV_DOCKER_7: the base image tag always comes from the DISTRO and DISTRO_VERSION build arguments
 
 ARG DEBIAN_FRONTEND=noninteractive
 ARG PUID=1000

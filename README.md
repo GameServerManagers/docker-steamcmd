@@ -227,7 +227,12 @@ How SteamCMD is installed differs by distro, but the result is the same:
 
 ## How new releases are added
 
-The images that get built are listed in [`versions.json`](versions.json). Each week a workflow checks for a new Ubuntu LTS, Debian stable or Rocky Linux release. When it finds one whose base image is on Docker Hub, and the new image builds and passes a SteamCMD smoke test, it opens a pull request to add it. A new Ubuntu LTS also takes the `latest` tag. Rocky Linux 10 is skipped because it has no i686 libraries.
+The images that get built are listed in [`versions.json`](versions.json). Each week a workflow checks for a new Ubuntu LTS, Debian stable or Rocky Linux release. It opens a pull request to add a new release when:
+
+- its base image is on Docker Hub, and
+- the new image builds and passes a SteamCMD smoke test.
+
+A new Ubuntu LTS also takes the `latest` tag. Rocky Linux 10 is skipped because it has no i686 libraries.
 
 ## Credits
 
