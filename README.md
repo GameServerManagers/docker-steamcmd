@@ -34,13 +34,18 @@ Images are built for `linux/amd64` only. SteamCMD is an x86 binary and does not 
 
 \*Dates are the end of standard (free) security updates according to Canonical's LTS schedule. Extended Security Maintenance (ESM) may continue past these dates. An image may be deprecated sooner if upstream packages (such as SteamCMD dependencies) become unavailable.
 
-### Debian (testing only)
+### Other distros (testing only)
 
-| Tag(s)      | Debian Release | Notes                                                    |
-| ----------- | -------------- | -------------------------------------------------------- |
-| `debian-13` | 13 (Trixie)    | For testing LinuxGSM on Debian. Not a supported release. |
+These images are for testing LinuxGSM on other distros. They are not supported releases.
+
+| Tag(s)      | Release            |
+| ----------- | ------------------ |
+| `debian-13` | Debian 13 (Trixie) |
+| `rocky-9`   | Rocky Linux 9      |
 
 The Debian images enable the `contrib` and `non-free` components, because the `steamcmd` package is in `non-free`.
+
+Rocky Linux has no `steamcmd` package, so the image installs Valve's SteamCMD tarball and a `steamcmd` wrapper that uses the same `/home/steam/.local/share/Steam` layout as the other images. `gosu` comes from its GitHub release, checked against a pinned SHA-256. Rocky Linux 10 can't be added, because it no longer ships the 32-bit (i686) libraries SteamCMD needs.
 
 Pin a specific `ubuntu-XX.04` tag if you need a stable base. `latest` moves to each new Ubuntu LTS shortly after release.
 
@@ -135,11 +140,12 @@ If your platform requires the container to start as non-root (e.g. `--user 1000:
 
 ### Building the Image
 
-There is a single `Dockerfile`. Choose the base with the `DISTRO` (`ubuntu` or `debian`) and `DISTRO_VERSION` build arguments (defaults to the current Ubuntu LTS). You can also bake in alternate default IDs:
+There is a single `Dockerfile`. Choose the base with the `DISTRO` (`ubuntu`, `debian` or `rocky`) and `DISTRO_VERSION` build arguments (defaults to the current Ubuntu LTS). The base image defaults to `<distro>:<version>`; set `BASE_IMAGE` when it is named differently, as Rocky Linux's is. You can also bake in alternate default IDs:
 
 ```bash
 docker build --build-arg DISTRO_VERSION=24.04 --build-arg PUID=1001 --build-arg PGID=1001 -t steamcmd:ubuntu-24.04-uid1001 .
 docker build --build-arg DISTRO=debian --build-arg DISTRO_VERSION=13 -t steamcmd:debian-13 .
+docker build --build-arg DISTRO=rocky --build-arg DISTRO_VERSION=9 --build-arg BASE_IMAGE=rockylinux/rockylinux:9 -t steamcmd:rocky-9 .
 ```
 
 ### Troubleshooting permissions

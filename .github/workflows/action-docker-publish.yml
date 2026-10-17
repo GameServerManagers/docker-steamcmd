@@ -86,6 +86,7 @@ jobs:
           build-args: |
             DISTRO=${{ matrix.distro }}
             DISTRO_VERSION=${{ matrix.version }}
+            BASE_IMAGE=${{ matrix.base || format('{0}:{1}', matrix.distro, matrix.version) }}
           platforms: linux/amd64
           load: true
           tags: steamcmd:test
@@ -102,6 +103,7 @@ jobs:
           build-args: |
             DISTRO=${{ matrix.distro }}
             DISTRO_VERSION=${{ matrix.version }}
+            BASE_IMAGE=${{ matrix.base || format('{0}:{1}', matrix.distro, matrix.version) }}
           platforms: linux/amd64
           push: true
           tags: ${{ steps.meta.outputs.tags }}
