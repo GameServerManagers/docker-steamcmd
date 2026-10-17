@@ -34,6 +34,20 @@ Images are built for `linux/amd64` only. SteamCMD is an x86 binary and does not 
 
 \*Dates are the end of standard (free) security updates according to Canonical's LTS schedule. Extended Security Maintenance (ESM) may continue past these dates. An image may be deprecated sooner if upstream packages (such as SteamCMD dependencies) become unavailable.
 
+### Other distros (testing only)
+
+These images are for testing LinuxGSM on other distros. They are not supported releases.
+
+| Tag(s)      | Release              |
+| ----------- | -------------------- |
+| `debian-13` | Debian 13 (Trixie)   |
+| `debian-12` | Debian 12 (Bookworm) |
+| `rocky-9`   | Rocky Linux 9        |
+
+The Debian images enable the `contrib` and `non-free` components, because the `steamcmd` package is in `non-free`.
+
+Rocky Linux has no `steamcmd` package, so the image installs Valve's SteamCMD tarball and a `steamcmd` wrapper that uses the same `/home/steam/.local/share/Steam` layout as the other images. `gosu` comes from its GitHub release, checked against a pinned SHA-256. Rocky Linux 10 can't be added, because it no longer ships the 32-bit (i686) libraries SteamCMD needs.
+
 Pin a specific `ubuntu-XX.04` tag if you need a stable base. `latest` moves to each new Ubuntu LTS shortly after release.
 
 ## Usage
@@ -127,10 +141,12 @@ If your platform requires the container to start as non-root (e.g. `--user 1000:
 
 ### Building the Image
 
-There is a single `Dockerfile`; choose the Ubuntu release with the `UBUNTU_VERSION` build argument (defaults to the current LTS). You can also bake in alternate default IDs:
+There is a single `Dockerfile`. Choose the base with the `DISTRO` (`ubuntu`, `debian` or `rocky`) and `DISTRO_VERSION` build arguments (defaults to the current Ubuntu LTS). The base image defaults to `<distro>:<version>`; set `BASE_IMAGE` when it is named differently, as Rocky Linux's is. You can also bake in alternate default IDs:
 
 ```bash
-docker build --build-arg UBUNTU_VERSION=24.04 --build-arg PUID=1001 --build-arg PGID=1001 -t steamcmd:ubuntu-24.04-uid1001 .
+docker build --build-arg DISTRO_VERSION=24.04 --build-arg PUID=1001 --build-arg PGID=1001 -t steamcmd:ubuntu-24.04-uid1001 .
+docker build --build-arg DISTRO=debian --build-arg DISTRO_VERSION=13 -t steamcmd:debian-13 .
+docker build --build-arg DISTRO=rocky --build-arg DISTRO_VERSION=9 --build-arg BASE_IMAGE=rockylinux/rockylinux:9 -t steamcmd:rocky-9 .
 ```
 
 ### Troubleshooting permissions
@@ -256,6 +272,6 @@ Not natively. SteamCMD is x86-only. On Apple Silicon, Docker Desktop can run the
 
 This image is inspired by the [steamcmd/docker](https://github.com/steamcmd/docker) image and is primarily used for [LinuxGSM](https://linuxgsm.com) game servers.
 
-### Supported Ubuntu releases
+### Supported releases
 
-The versions that get built are listed in [`ubuntu-versions.json`](ubuntu-versions.json). A weekly workflow checks Ubuntu's release data for a new LTS. When one is released and the image builds and passes a SteamCMD smoke test, the workflow opens a pull request that adds it and moves `latest` to it.
+The versions that get built are listed in [`versions.json`](versions.json). A weekly workflow checks for a new Ubuntu LTS, Debian stable or Rocky Linux release. When one is released, its base image is on Docker Hub, and the image builds and passes a SteamCMD smoke test, the workflow opens a pull request that adds it. For a new Ubuntu LTS, the pull request also moves `latest` to it. Rocky Linux 10 is skipped, because it has no i686 libraries.
