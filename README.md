@@ -273,4 +273,4 @@ This image is inspired by the [steamcmd/docker](https://github.com/steamcmd/dock
 
 ### Supported releases
 
-The versions that get built are listed in [`versions.json`](versions.json). A weekly workflow checks Ubuntu's release data for a new LTS. When one is released and the image builds and passes a SteamCMD smoke test, the workflow opens a pull request that adds it and moves `latest` to it.
+The versions that get built are listed in [`versions.json`](versions.json). A weekly workflow checks for a new Ubuntu LTS, Debian stable or Rocky Linux release. When one is released, its base image is on Docker Hub, and the image builds and passes a SteamCMD smoke test, the workflow opens a pull request that adds it. For a new Ubuntu LTS, the pull request also moves `latest` to it. Rocky Linux 10 is skipped, because it has no i686 libraries.
