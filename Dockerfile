@@ -1,5 +1,6 @@
-ARG UBUNTU_VERSION=26.04
-FROM ubuntu:${UBUNTU_VERSION}
+ARG DISTRO=ubuntu
+ARG DISTRO_VERSION=26.04
+FROM ${DISTRO}:${DISTRO_VERSION}
 
 ARG DEBIAN_FRONTEND=noninteractive
 ARG PUID=1000
@@ -24,6 +25,10 @@ RUN if id ubuntu >/dev/null 2>&1; then \
 RUN echo "**** Install SteamCMD ****" \
   && echo steam steam/question select "I AGREE" | debconf-set-selections \
   && echo steam steam/license note '' | debconf-set-selections \
+  && . /etc/os-release \
+  && if [ "${ID}" = "debian" ]; then \
+    sed -i 's/^Components: main$/Components: main contrib non-free/' /etc/apt/sources.list.d/debian.sources; \
+  fi \
   && dpkg --add-architecture i386 \
   && apt-get update \
   && apt-get install -y --no-install-recommends \
@@ -35,7 +40,11 @@ RUN echo "**** Install SteamCMD ****" \
     steamcmd \
     gosu \
   && ln -s /usr/games/steamcmd /usr/bin/steamcmd \
-  && locale-gen en_US.UTF-8 \
+  && if [ "${ID}" = "debian" ]; then \
+    sed -i 's/^# *en_US.UTF-8 UTF-8/en_US.UTF-8 UTF-8/' /etc/locale.gen && locale-gen; \
+  else \
+    locale-gen en_US.UTF-8; \
+  fi \
   && apt-get -y autoremove \
   && apt-get -y clean \
   && rm -rf /usr/share/man /usr/share/doc /usr/share/info /usr/share/lintian /usr/share/locale/* \

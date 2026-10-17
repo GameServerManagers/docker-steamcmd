@@ -28,8 +28,8 @@ jobs:
           codename="$(awk -F, -v ver="${newest} LTS" '$1 == ver { print $2 }' ubuntu.csv)"
           rm -f ubuntu.csv
           echo "Newest released LTS: ${newest} (${codename})"
-          if jq -e --arg v "${newest}" 'any(.[]; .version == $v)' ubuntu-versions.json >/dev/null; then
-            echo "Already tracked in ubuntu-versions.json"
+          if jq -e --arg v "${newest}" 'any(.[]; .distro == "ubuntu" and .version == $v)' versions.json >/dev/null; then
+            echo "Already tracked in versions.json"
             echo "new=false" >> "$GITHUB_OUTPUT"
           elif ! docker manifest inspect "ubuntu:${newest}" >/dev/null 2>&1; then
             echo "ubuntu:${newest} not yet on Docker Hub"
@@ -45,16 +45,16 @@ jobs:
       - name: Test build
         if: steps.lts.outputs.new == 'true'
         run: |
-          docker build --build-arg UBUNTU_VERSION=${{ steps.lts.outputs.version }} -t steamcmd:test .
+          docker build --build-arg DISTRO=ubuntu --build-arg DISTRO_VERSION=${{ steps.lts.outputs.version }} -t steamcmd:test .
           docker run --rm steamcmd:test +login anonymous +app_info_update 1 +quit
 
       - name: Add version and make it latest
         if: steps.lts.outputs.new == 'true'
         run: |
           jq --arg v "${{ steps.lts.outputs.version }}" \
-            '[{version: $v, latest: true}] + map(.latest = false)' \
-            ubuntu-versions.json > ubuntu-versions.json.tmp
-          mv ubuntu-versions.json.tmp ubuntu-versions.json
+            '[{distro: "ubuntu", version: $v, latest: true}] + map(.latest = false)' \
+            versions.json > versions.json.tmp
+          mv versions.json.tmp versions.json
 
       - name: Create pull request
         if: steps.lts.outputs.new == 'true'
@@ -68,9 +68,9 @@ jobs:
 
             The image built and passed the SteamCMD smoke test (`+login anonymous +app_info_update 1 +quit`) in this workflow.
 
-            This PR adds it to `ubuntu-versions.json` and moves the `latest` / `ubuntu` tags to it.
+            This PR adds it to `versions.json` and moves the `latest` / `ubuntu` tags to it.
 
             Before merging:
             - [ ] Update the Tags table in `README.md`
-            - [ ] Change the `UBUNTU_VERSION` default in `Dockerfile`
+            - [ ] Change the `DISTRO_VERSION` default in `Dockerfile`
             - [ ] Decide whether the oldest release should be dropped
