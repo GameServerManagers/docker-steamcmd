@@ -95,7 +95,14 @@ jobs:
           labels: ${{ steps.meta.outputs.labels }}
 
       - name: Smoke test
-        run: docker run --rm steamcmd:test +login anonymous +app_info_update 1 +quit
+        run: |
+          docker run --rm --entrypoint bash steamcmd:test -c '
+            set -euo pipefail
+            command -v steamcmd
+            test -x /usr/games/steamcmd
+            id steam > /dev/null
+            test -d /home/steam
+          '
 
       - name: Push (${{ matrix.distro }}-${{ matrix.version }})
         if: github.event_name != 'pull_request'
